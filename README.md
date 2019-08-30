@@ -1,2 +1,2 @@
-# yammi-b4-1.12.2
- Yammi b4 cheatmod for 1.12.2
+# yammi-1.12.2-b4
+ Yammi cheatmod for 1.12.2 (version b4)
