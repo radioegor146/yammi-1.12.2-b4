@@ -12,13 +12,9 @@ import ru.yammi.eventsystem.EventBus;
 import java.lang.invoke.MethodHandles;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = "yammi-b4", name = "Yammi b4", version = "b4")
 public class Main {
 
     private Logger logger = LogManager.getLogger(Main.class);
@@ -29,12 +25,7 @@ public class Main {
     }
 
     public int getDays() {
-        return 1337;
-    }
-
-    @EventHandler
-    public void init(FMLInitializationEvent event) throws Throwable {
-        main();
+        return 1488;
     }
 
     public void main() throws Throwable {
