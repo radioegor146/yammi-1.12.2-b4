@@ -24,7 +24,7 @@ public class ConfigHelper {
     private static String path;
 
     static {
-        path = String.valueOf(new StringBuilder().append(System.getProperty("user.home")).append(File.separator).append("yammi_cristalix.json"));
+        path = String.valueOf(new StringBuilder().append(System.getProperty("user.home")).append(File.separator).append("yammi-1.12.2-b4.json"));
     }
 
     public static BooleanValue getBoolValue(String moduleName, String valueName) {
