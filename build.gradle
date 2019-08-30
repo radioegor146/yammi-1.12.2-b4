@@ -1,10 +1,12 @@
 buildscript {
     repositories {
         jcenter()
-        maven { url "http://files.minecraftforge.net/maven" }
+        maven { url "http://files.minecraftforge.net/maven" }        
+        flatDir dirs: "$projectDir/proguard/lib/"
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'        
+        classpath ":proguard:"
     }
 }
 
@@ -25,17 +27,75 @@ minecraft {
     mappings = "snapshot_20171003"
 }
 
-processResources {
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        expand 'version': project.version, 'mcversion': project.minecraft.version
-    }
-        
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+def generateString(String alphabet, int n) {
+    return new Random().with {
+        (1..n).collect { alphabet[nextInt(alphabet.length())] }.join()
     }
 }
+
+def generateDictionaryFile(String name) {
+    File dictionaryFile = new File(name)
+    if (dictionaryFile.exists())
+        return;
+    String outputData = ""
+    for (int i = 0; i < 10000; i++)
+        outputData += generateString((('a'..'z') + ('A'..'Z') + ('0'..'9')).join(), 16) + "\n"
+    dictionaryFile.getParentFile().mkdirs()
+    dictionaryFile.delete()
+    dictionaryFile.write outputData
+}
+
+task generateDictionary {
+    doFirst {
+        generateDictionaryFile("$buildDir/proguard/class-dictionary.txt")
+        generateDictionaryFile("$buildDir/proguard/package-dictionary.txt")
+        generateDictionaryFile("$buildDir/proguard/fieldmethod-dictionary.txt")
+    }
+}
+
+task obfuscateProGuard(type: proguard.gradle.ProGuardTask) {
+    doFirst {
+        injars "$buildDir/libs/" + project.tasks["jar"].archiveName
+        outjars "$buildDir/libs/final-" + project.tasks["jar"].archiveName
+        libraryjars "${System.getProperty("java.home")}/lib/rt.jar"
+        libraryjars "${System.getProperty("java.home")}/lib/jce.jar"
+        libraryjars sourceSets.main.compileClasspath
+        keepattributes "RuntimeVisibleAnnotations,RuntimeVisibleParameterAnnotations,RuntimeVisibleTypeAnnotations"
+        classobfuscationdictionary "$buildDir/proguard/class-dictionary.txt"
+        packageobfuscationdictionary "$buildDir/proguard/package-dictionary.txt"
+        obfuscationdictionary "$buildDir/proguard/fieldmethod-dictionary.txt"
+        dontshrink
+        dontoptimize
+        dontwarn "java.lang.invoke.MethodHandle"
+        printmapping "$buildDir/libs/proguard-" + project.tasks["jar"].archiveName + ".map"
+    }
+}
+
+task createJavaInjectorComment {
+    doFirst {
+        File mainClassFile = new File("$projectDir/mainclass.txt")
+        if (mainClassFile.exists())
+            mainClassFile.delete()
+        String mappingsText = new File("$buildDir/libs/proguard-" + project.tasks["jar"].archiveName + ".map").text
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile("by\\.radioegor146\\.interop\\.JavaInjector -> (.*?):")
+        java.util.regex.Matcher m = p.matcher(mappingsText)
+        m.find();
+        new File("$projectDir/mainclass.txt").write m.group(1);
+    }
+}
+
+task copyJar {
+    doFirst {
+        copy {
+            from "$buildDir/libs"
+            include "final-" + project.tasks["jar"].archiveName
+            into "$buildDir/libs"
+            rename "final-" + project.tasks["jar"].archiveName, project.tasks["jar"].archiveName
+        }
+    }
+}
+
+obfuscateProGuard.dependsOn generateDictionary
+createJavaInjectorComment.dependsOn obfuscateProGuard
+copyJar.dependsOn createJavaInjectorComment
+reobfJar.dependsOn copyJar
