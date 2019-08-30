@@ -74,28 +74,28 @@
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
     <IntDir>$(SolutionDir)temp\$(Configuration)\x$(PlatformArchitecture)\</IntDir>
-    <TargetName>xenobyte.x$(PlatformArchitecture)</TargetName>
+    <TargetName>yammi-1.12.2-b4.x$(PlatformArchitecture)</TargetName>
     <OutDir>$(SolutionDir)output\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
     <IntDir>$(SolutionDir)temp\$(Configuration)\x$(PlatformArchitecture)\</IntDir>
-    <TargetName>xenobyte.x$(PlatformArchitecture)</TargetName>
+    <TargetName>yammi-1.12.2-b4.x$(PlatformArchitecture)</TargetName>
     <OutDir>$(SolutionDir)output\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
     <IntDir>$(SolutionDir)temp\$(Configuration)\x$(PlatformArchitecture)\</IntDir>
-    <TargetName>xenobyte.x$(PlatformArchitecture)</TargetName>
+    <TargetName>yammi-1.12.2-b4.x$(PlatformArchitecture)</TargetName>
     <OutDir>$(SolutionDir)output\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
     <IntDir>$(SolutionDir)temp\$(Configuration)\x$(PlatformArchitecture)\</IntDir>
-    <TargetName>xenobyte.x$(PlatformArchitecture)</TargetName>
+    <TargetName>yammi-1.12.2-b4.x$(PlatformArchitecture)</TargetName>
     <OutDir>$(SolutionDir)output\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
